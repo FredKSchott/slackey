@@ -1,8 +1,6 @@
 Slackey
 ==============
 
-A dependable Slack SDK written in JavaScript.
-
 ```
 npm install slackey
 ```
@@ -39,8 +37,8 @@ slackAPI.getAccessToken({
   code: 'USER_AUTH_CODE',
   redirectURI: 'http://localhost:5000/auth/slack/return', // Optional, defaults to `authRedirectURI`
 }, function(err, response) {
-  console.log(response);
-  // {access_token: 'XXX', scope: 'read'}
+  console.log(err, response);
+  // null {access_token: 'XXX', scope: 'read'}
 }
 ```
 
@@ -52,13 +50,13 @@ var slackAPIClient = slackAPI.getClient('USER_ACCESS_TOKEN');
 
 ### Make Calls to the API
 
-**`slackAPIClient.api(method, [arguments,] [callback])`** -  Call any Slack API method with an optional set of arguments.
+**`slackAPIClient.api(method, [arguments,] [callback])`**  - Call any Slack API method with an optional set of arguments.
 
 ```js
 // Get the list of users on your team
 slackAPIClient.api('users.list', function(err, response) {
-  console.log(response);
-  // {ok: true, members: ...
+  console.log(err, response);
+  // null {ok: true, members: ...
 });
 
 // Post a message from your application
@@ -68,8 +66,16 @@ slackAPIClient.api('chat.postMessage',
     channel: '#channel'
   },
   function(err, response) {
-    console.log(response);
-    // {ok: true, channel: ...
+    console.log(err, response);
+    // null {ok: true, channel: ...
   }
 );
 ```
+
+#### Errors
+
+An error object will be propagated if there was a problem making the request or recieving the response. All completed responses, even those that resulted in erroneus status codes, will be propagated to the consumer without an error.
+
+#### Additional Response Info
+
+The body of a Slack API response will usually have all the information you need about the success or failure of a request. However, if you do need access to the full response object (provided by [request](https://github.com/request/request)) it is provided as an optional third argument to the callback. Use as needed.
