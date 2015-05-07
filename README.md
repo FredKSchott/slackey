@@ -1,17 +1,18 @@
-slackey - A dependable JavaScript SDK for Slack
+Slackey
 ==============
+
+A dependable Slack SDK written in JavaScript. 
 
 ```
 npm install slackey
 ```
 
 ## Why Slackey?
+There are already [plenty](https://www.npmjs.com/package/node-slack) [of](https://www.npmjs.com/package/slack-api) [JavaScript](https://www.npmjs.com/package/slack-client) [libraries](https://www.npmjs.com/package/slack-node) [out there](https://www.npmjs.com/package/slack-notify) written for the Slack API. Why build another one?
 
-There are already plenty of libraries written for the Slack API. Why write another one?
-
-- **First-Class API Support:** Most Slack SDKs that I originally came across either had limited support outside of webhooks, or none at all. With Slackey, a good API experience is the only focus.
-- **Frontend & Backend Ready:** Slackey is committed to work in node, iojs, and even the browser (via [browserify](http://browserify.org/)).
+- **First-Class API Support:** Most Slack SDKs that I originally came across had either limited API support outside of webhooks, or no support at all. With Slackey, a good API experience is the primary focus.
 - **Dependable:** Stability is a top priority for Slackey. Any issues and pull requests will be addressed quickly, and bug fixes will be prioritized whenever possible.
+- **Frontend & Backend Ready:** Slackey is committed to work in node, iojs, and even the browser (via [browserify](http://browserify.org/)).
 
 ## Usage
 
@@ -30,20 +31,22 @@ var slackAPI = SlackAPI({
 ### Get an API Access Token
 
 ```js
-slackAPI.getAuthToken('USER_AUTH_CODE', function(err, response) {
+// NOTE: clientID & clientSecret are both required to get access tokens
+slackAPI.getAccessToken('USER_AUTH_CODE', function(err, response) {
   console.log(response);
   // {access_token: 'XXX', scope: 'read'}
 }
 ```
 
-
 ### Get an API Client
 
 ```js
-var slackAPIClient = slackAPI.getClient('USER_AUTH_TOKEN');
+var slackAPIClient = slackAPI.getClient('USER_ACCESS_TOKEN');
 ```
 
 ### Make Calls to the API
+
+**`slackAPIClient.api(method, [arguments,] [callback])`** -  Call any Slack API method with an optional set of arguments. 
 
 ```js
 // Get the list of users on your team
