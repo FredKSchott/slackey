@@ -21,10 +21,10 @@ There are already [plenty](https://www.npmjs.com/package/node-slack) [of](https:
 ```js
 var SlackAPI = require('slackey');
 
-var slackAPI = SlackAPI({
-  clientID: 'XXX' // Optional
-  clientSecret: 'XXX' // Optional
-  apiURL: 'https://slack.com/api/' // Optional
+var slackAPI = new SlackAPI({
+  clientID: 'XXX', // Optional
+  clientSecret: 'XXX', // Optional
+  apiURL: 'https://slack.com/api/', // Optional
 });
 ```
 
