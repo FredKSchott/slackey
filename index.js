@@ -17,8 +17,8 @@ var SlackAPIClient = require('./lib/api-client');
  * interact with the API directly, or on behalf of a user via a SlackAPIClient.
  *
  * @param {Object} config A collection of options to configure SlackAPI with.
- * @param {Object} [config.clientID] Your application's "client ID", required for working with auth
- * @param {Object} [config.clientSecret] Your application's "client Secret", required for working with auth
+ * @param {Object} [config.clientID] Your application's "client ID", required for working with auth codes
+ * @param {Object} [config.clientSecret] Your application's "client Secret", required for working with auth codes
  * @param {Object} [config.apiURL] The API URL to communicate with, defaults to 'https://slack.com/api/'
  * @return {void}
  */
@@ -29,7 +29,7 @@ var SlackAPI = module.exports = function SlackAPI(config) {
 };
 
 /**
- * Return a newly initialized client with the provided auth token. You can use this client to interact
+ * Return a newly initialized client with the provided access token. You can use this client to interact
  * with the API on behalf of the user.
  *
  * @param  {string} token
@@ -40,15 +40,16 @@ SlackAPI.prototype.getClient = function(token) {
 };
 
 /**
- * Call the 'oauth.access' API method to exchange a new auth code for an authorized API token. Use this
- * token to generate a new SlackAPIClient via `.getClient()`.
+ * Call the 'oauth.access' API method to exchange a fresh auth code for an authorized API access token.
+ * You can use this token to generate a new SlackAPIClient via `.getClient()` and make calls on behalf
+ * of the user.
  *
  * @param {string} code
  * @param {Function} callback
  * @throws {AssertionError} If clientID or clientSecret was not set on initialization.
  * @callback {[Error, ResponseBody, Response]}
  */
-SlackAPI.prototype.getAuthToken = function(code, callback) {
+SlackAPI.prototype.getAccessToken = function(code, callback) {
   assert(this.clientID, 'a clientID is required to authorize users with the Slack API.');
   assert(this.clientSecret, 'a clientSecret is required to authorize users with the Slack API.');
   var requestOptions = {
