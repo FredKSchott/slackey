@@ -1,6 +1,6 @@
 {
   "name": "slackey",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A Node SDK for the Slack API",
   "main": "index.js",
   "scripts": {
@@ -12,9 +12,9 @@
   ],
   "author": "Fred K. Schott <fkschott@gmail.com>",
   "license": "MIT",
-  "repository" : {
-    "type" : "git",
-    "url" : "https://github.com/FredKSchott/slackey.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FredKSchott/slackey.git"
   },
   "dependencies": {
     "request": "^2.55.0"
