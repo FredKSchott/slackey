@@ -1,7 +1,7 @@
 Slackey
 ==============
 
-A dependable Slack SDK written in JavaScript. 
+A dependable Slack SDK written in JavaScript.
 
 ```
 npm install slackey
@@ -22,9 +22,12 @@ There are already [plenty](https://www.npmjs.com/package/node-slack) [of](https:
 var SlackAPI = require('slackey');
 
 var slackAPI = new SlackAPI({
-  clientID: 'XXX', // Optional
-  clientSecret: 'XXX', // Optional
-  apiURL: 'https://slack.com/api/', // Optional
+  // Required for getting access tokens:
+  clientID: 'XXX',
+  clientSecret: 'XXX',
+  // Optional:
+  apiURL: 'https://slack.com/api/',
+  authRedirectURI: 'XXX',
 });
 ```
 
@@ -32,7 +35,10 @@ var slackAPI = new SlackAPI({
 
 ```js
 // NOTE: clientID & clientSecret are both required to get access tokens
-slackAPI.getAccessToken('USER_AUTH_CODE', function(err, response) {
+slackAPI.getAccessToken({
+  code: 'USER_AUTH_CODE',
+  redirectURI: 'http://localhost:5000/auth/slack/return', // Optional, defaults to `authRedirectURI`
+}, function(err, response) {
   console.log(response);
   // {access_token: 'XXX', scope: 'read'}
 }
@@ -46,7 +52,7 @@ var slackAPIClient = slackAPI.getClient('USER_ACCESS_TOKEN');
 
 ### Make Calls to the API
 
-**`slackAPIClient.api(method, [arguments,] [callback])`** -  Call any Slack API method with an optional set of arguments. 
+**`slackAPIClient.api(method, [arguments,] [callback])`** -  Call any Slack API method with an optional set of arguments.
 
 ```js
 // Get the list of users on your team

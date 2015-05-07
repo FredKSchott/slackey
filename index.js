@@ -19,13 +19,16 @@ var SlackAPIClient = require('./lib/api-client');
  * @param {Object} config A collection of options to configure SlackAPI with.
  * @param {Object} [config.clientID] Your application's "client ID", required for working with auth codes
  * @param {Object} [config.clientSecret] Your application's "client Secret", required for working with auth codes
+ * @param {Object} [config.authRedirectURI] The default redirect URL your application uses during OAuth authentication
  * @param {Object} [config.apiURL] The API URL to communicate with, defaults to 'https://slack.com/api/'
  * @return {void}
  */
 var SlackAPI = module.exports = function SlackAPI(config) {
+  config = config || {};
   this.clientID = config.clientID;
   this.clientSecret = config.clientSecret;
   this.apiURL = config.apiURL || 'https://slack.com/api/';
+  this.authRedirectURI = config.authRedirectURI;
 };
 
 /**
@@ -44,21 +47,27 @@ SlackAPI.prototype.getClient = function(token) {
  * You can use this token to generate a new SlackAPIClient via `.getClient()` and make calls on behalf
  * of the user.
  *
- * @param {string} code
+ * @param {Object} options
+ * @param {string} options.code
+ * @param {string} [options.redirectURI] This must match the originally submitted URI (if one was sent).
+ *                                       Defaults to the 'authRedirectURI' option passed to the SlackAPI
+ *                                       constructor, if one was provided.
  * @param {Function} callback
  * @throws {AssertionError} If clientID or clientSecret was not set on initialization.
  * @callback {[Error, ResponseBody, Response]}
  */
-SlackAPI.prototype.getAccessToken = function(code, callback) {
+SlackAPI.prototype.getAccessToken = function(options, callback) {
   assert(this.clientID, 'a clientID is required to authorize users with the Slack API.');
   assert(this.clientSecret, 'a clientSecret is required to authorize users with the Slack API.');
+  var redirectURI = options.redirectURI || this.authRedirectURI;
   var requestOptions = {
     url: this.apiURL + 'oauth.access',
     method: 'POST',
     form: {
       client_id: this.clientID,
       client_secret: this.clientSecret,
-      code: code,
+      code: options.code,
+      redirect_uri: redirectURI,
     }
   };
   SlackAPIClient.prototype.makeRequest(requestOptions, callback);
