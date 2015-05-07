@@ -12,6 +12,10 @@
   ],
   "author": "Fred K. Schott <fkschott@gmail.com>",
   "license": "MIT",
+  "repository" : {
+    "type" : "git",
+    "url" : "https://github.com/FredKSchott/slackey.git"
+  },
   "dependencies": {
     "request": "^2.55.0"
   },
