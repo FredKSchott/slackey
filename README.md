@@ -31,7 +31,6 @@ var slackAPI = new SlackAPI({
 ### Get an API Access Token
 
 ```js
-// NOTE: clientID & clientSecret are both required to get access tokens
 slackAPI.getAccessToken({
   code: 'USER_AUTH_CODE',
   redirectURI: 'http://localhost:5000/auth/slack/return', // Optional, defaults to `authRedirectURI`
@@ -73,8 +72,8 @@ slackAPIClient.api('chat.postMessage',
 
 #### Errors
 
-An error object will be propagated if there was a problem making the request or recieving the response. All completed responses, even those that resulted in erroneus status codes, will be propagated to the consumer without an error.
+An error object will only be propagated if there was a problem making the actual request or recieving the actual response. All completed responses, even those that resulted in erroneus status codes or with `ok: false` will be propagated to the consumer without an error.
 
 #### Additional Response Info
 
-The body of a Slack API response will usually have all the information you need about the success or failure of a request. However, if you do need access to the full response object (provided by [request](https://github.com/request/request)) it is provided as an optional third argument to the callback. Use as needed.
+The body of a Slack API response will usually have [all the information you need](https://api.slack.com/web#basics) about the success or failure of a request. However, if you do need access to the full response object (provided by [request](https://github.com/request/request)) it is provided as an optional third argument to the callback. Use as needed.
