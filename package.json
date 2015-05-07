@@ -7,8 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "slack",
-    "sdk"
+    "slack", "sdk", "api", "upload"
   ],
   "author": "Fred K. Schott <fkschott@gmail.com>",
   "license": "MIT",
