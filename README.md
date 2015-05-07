@@ -1,16 +1,15 @@
 Slackey
 ==============
 
-```
-npm install slackey
-```
-
-## Why Slackey?
 There are already [plenty](https://www.npmjs.com/package/node-slack) [of](https://www.npmjs.com/package/slack-api) [JavaScript](https://www.npmjs.com/package/slack-client) [libraries](https://www.npmjs.com/package/slack-node) [out there](https://www.npmjs.com/package/slack-notify) written for the Slack API. Why build another one?
 
 - **First-Class API Support:** Most Slack SDKs that I originally came across had either limited API support outside of webhooks, or no support at all. With Slackey, a good API experience is the primary focus.
 - **Dependable:** Stability is a top priority for Slackey. Any issues and pull requests will be addressed quickly, and bug fixes will be prioritized whenever possible.
 - **Frontend & Backend Ready:** Slackey is committed to work in node, iojs, and even the browser (via [browserify](http://browserify.org/)).
+
+```
+npm install slackey
+```
 
 ## Usage
 
