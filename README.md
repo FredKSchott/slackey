@@ -3,8 +3,8 @@ Slackey
 
 There are already [plenty](https://www.npmjs.com/package/node-slack) [of](https://www.npmjs.com/package/slack-api) [JavaScript](https://www.npmjs.com/package/slack-client) [libraries](https://www.npmjs.com/package/slack-node) [out there](https://www.npmjs.com/package/slack-notify) written for the Slack API. Why build another one? And more importantly, why use this one?
 
-- **First-Class API Support:** Most Slack SDKs that I originally came across had either limited API support outside of webhooks, or no support at all. With Slackey, a good API experience is the primary focus.
-- **Dependable:** Stability is a top priority for Slackey. Any issues and pull requests will be addressed quickly, and bug fixes will be prioritized whenever possible.
+- **First-Class API Support:** Most Slack SDKs have either limited API support outside of webhooks, or no support at all. With Slackey, a good API experience is the focus.
+- **Dependable:** Stability is another top priority for Slackey. Slackey is (almost) fully tested, and any issues and pull requests will be addressed quickly. Bug fixes will be prioritized whenever possible.
 - **Frontend & Backend Ready:** Slackey is committed to work in node, iojs, and even the browser (via [browserify](http://browserify.org/)).
 
 ```
@@ -48,7 +48,7 @@ var slackAPIClient = slackAPI.getClient('USER_ACCESS_TOKEN');
 
 ### Make Calls to the API
 
-**`slackAPIClient.api(method, [arguments,] [callback])`**  - Call any Slack API method with an optional set of arguments.
+**`slackAPIClient.api(method, [arguments,] [callback])`**  - Call any Slack API method with an optional set of arguments. Authentication is automatically inherited from the client's authorized access token.
 
 ```js
 // Get the list of users on your team
