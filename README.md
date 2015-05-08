@@ -19,21 +19,27 @@ npm install slackey
 var SlackAPI = require('slackey');
 
 var slackAPI = new SlackAPI({
-  // Required for getting access tokens:
+  // Required for getting access tokens
   clientID: 'XXX',
   clientSecret: 'XXX',
-  // Optional:
-  apiURL: 'https://slack.com/api/',
-  authRedirectURI: 'http://localhost:5000/slack',
+  // Optional
+  apiURL:          // Defaults to: 'https://slack.com/api/'
+  authRedirectURI: // Defaults to: none
 });
 ```
 
 ### Get an API Access Token
 
+**`slackAPI.getAccessToken(options, callback)`** - Exchange a valid OAuth authentication code for an API access token via the 'oauth.access' method.
+
+Supported options:
+- `code`: A valid, fresh OAuth auth code
+- `redirectURI`: (Optional) The redirect URI used to get the provided auth code, if one was provided. Defaults to the `authRedirectURI` value provided to the constructor.
+
 ```js
 slackAPI.getAccessToken({
   code: 'USER_AUTH_CODE',
-  redirectURI: 'http://localhost:5000/auth/slack/return', // Optional, defaults to `authRedirectURI`
+  redirectURI: 'http://localhost:5000/auth/slack/return',
 }, function(err, response) {
   console.log(err, response);
   // null {access_token: 'XXX', scope: 'read'}
