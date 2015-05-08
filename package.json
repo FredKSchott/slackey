@@ -1,6 +1,6 @@
 {
   "name": "slackey",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "A Node SDK for the Slack API",
   "main": "index.js",
   "scripts": {
