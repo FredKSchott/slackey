@@ -39,7 +39,10 @@ var SlackAPI = module.exports = function SlackAPI(config) {
  * @return {SlackAPIClient}
  */
 SlackAPI.prototype.getClient = function(token) {
-  return new SlackAPIClient(token);
+  return new SlackAPIClient({
+    token: token,
+    apiURL: this.apiURL,
+  });
 };
 
 /**
