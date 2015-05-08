@@ -24,7 +24,7 @@ var slackAPI = new SlackAPI({
   clientSecret: 'XXX',
   // Optional:
   apiURL: 'https://slack.com/api/',
-  authRedirectURI: 'XXX',
+  authRedirectURI: 'http://localhost:5000/slack',
 });
 ```
 
