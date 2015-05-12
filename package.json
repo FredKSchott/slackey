@@ -19,6 +19,7 @@
     "url": "https://github.com/FredKSchott/slackey.git"
   },
   "dependencies": {
+    "object-assign": "^2.0.0",
     "request": "^2.55.0",
     "sinon": "^1.14.1"
   },
