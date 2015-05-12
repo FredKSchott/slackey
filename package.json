@@ -19,10 +19,12 @@
     "url": "https://github.com/FredKSchott/slackey.git"
   },
   "dependencies": {
-    "request": "^2.55.0"
+    "request": "^2.55.0",
+    "sinon": "^1.14.1"
   },
   "devDependencies": {
     "eslint": "^0.20.0",
-    "mocha": "^2.2.4"
+    "mocha": "^2.2.4",
+    "proxyquire": "^1.4.0"
   }
 }
