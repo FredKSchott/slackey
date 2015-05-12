@@ -10,7 +10,7 @@ describe('SlackAPIClient', function() {
 
   beforeEach(function() {
     requestStub = this.sinon.stub();
-    SlackAPIClient = proxyquire('../lib/api-client.js', {
+    SlackAPIClient = proxyquire('../../lib/api-client.js', {
       'request': requestStub
     });
   });
