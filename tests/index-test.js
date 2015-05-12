@@ -1,10 +1,20 @@
 'use strict';
 
 var assert = require('assert');
-var SlackAPI = require('../index.js');
-var SlackAPIClient = require('../lib/api-client.js');
+var proxyquire = require('proxyquire');
+var SlackAPIClient = require('../lib/api-client');
+
+var SlackAPI;
+var SlackAPIClientSpy;
 
 describe('SlackAPI', function() {
+
+  beforeEach(function() {
+    SlackAPIClientSpy = this.sinon.spy(SlackAPIClient);
+    SlackAPI = proxyquire('../index.js', {
+      './lib/api-client': SlackAPIClientSpy
+    });
+  });
 
   describe('constructor', function() {
 
@@ -38,19 +48,17 @@ describe('SlackAPI', function() {
 
   describe('.getClient()', function() {
 
-    var slackAPI;
-
-    beforeEach(function() {
-      slackAPI = new SlackAPI();
-    });
-
     it('should return a SlackAPIClient object when called', function() {
+      var slackAPI = new SlackAPI();
       var slackAPIClient = slackAPI.getClient('TOKEN');
       assert.ok(slackAPIClient instanceof SlackAPIClient);
     });
 
-    it.skip('should pass the token to the SlackAPIClient constructor when called', function() {
-      // TODO: Implement when mocking support is added
+    it('should pass the token and API URL to the SlackAPIClient constructor when called', function() {
+      var slackAPI = new SlackAPI({apiURL: 'SLACK_API_URL'});
+      slackAPI.getClient('TOKEN');
+      assert(SlackAPIClientSpy.calledWithNew());
+      assert(SlackAPIClientSpy.calledWith({token: 'TOKEN', apiURL: 'SLACK_API_URL'}));
     });
 
   });
@@ -60,23 +68,57 @@ describe('SlackAPI', function() {
     it('should throw an assertion error when clientID has not been set', function() {
       var slackAPI = new SlackAPI({clientSecret: 'XXX'});
       assert.throws(function() {
-        slackAPI.getAccessToken({code: 'AUTHCODE'});
+        slackAPI.getAccessToken({code: 'AUTH_CODE'});
       }, assert.AssertionError);
     });
 
     it('should throw an assertion error when clientSecret has not been set', function() {
       var slackAPI = new SlackAPI({clientID: 'XXX'});
       assert.throws(function() {
-        slackAPI.getAccessToken({code: 'AUTHCODE'});
+        slackAPI.getAccessToken({code: 'AUTH_CODE'});
       }, assert.AssertionError);
     });
 
-    it.skip('should POST to the oauth.access method with the correct form fields when called', function() {
-      // TODO: Implement when mocking support is added
+    it('should POST to the oauth.access method with the correct form fields when called', function(done) {
+      var slackAPI = new SlackAPI({clientID: 'XXX', clientSecret: 'YYY', authRedirectURI: 'ZZZ'});
+      var makeRequestStub = this.sinon.stub(SlackAPIClient.prototype, 'makeRequest');
+      makeRequestStub.yields();
+
+      slackAPI.getAccessToken({code: 'AUTH_CODE', redirectURI: 'REDIRECT_URL'}, function() {
+        assert(makeRequestStub.calledOnce);
+        assert.deepEqual(makeRequestStub.firstCall.args[0], {
+          url: 'https://slack.com/api/oauth.access',
+          method: 'POST',
+          form: {
+            client_id: 'XXX',
+            client_secret: 'YYY',
+            code: 'AUTH_CODE',
+            redirect_uri: 'REDIRECT_URL'
+          }
+        });
+        done();
+      });
     });
 
-    it.skip('should use the default authRedirectURI when redirectURI option is not provided', function() {
-      // TODO: Implement when mocking support is added
+    it('should use the default authRedirectURI when redirectURI option is not provided', function(done) {
+      var slackAPI = new SlackAPI({clientID: 'XXX', clientSecret: 'YYY', authRedirectURI: 'ZZZ'});
+      var makeRequestStub = this.sinon.stub(SlackAPIClient.prototype, 'makeRequest');
+      makeRequestStub.yields();
+
+      slackAPI.getAccessToken({code: 'AUTH_CODE'}, function() {
+        assert(makeRequestStub.calledOnce);
+        assert.deepEqual(makeRequestStub.firstCall.args[0], {
+          url: 'https://slack.com/api/oauth.access',
+          method: 'POST',
+          form: {
+            client_id: 'XXX',
+            client_secret: 'YYY',
+            code: 'AUTH_CODE',
+            redirect_uri: 'ZZZ'
+          }
+        });
+        done();
+      });
     });
 
   });
