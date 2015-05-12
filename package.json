@@ -1,7 +1,7 @@
 {
   "name": "slackey",
   "version": "0.2.4",
-  "description": "A Node SDK for the Slack API",
+  "description": "A Dependable JavaScript SDK for the Slack API",
   "main": "index.js",
   "scripts": {
     "test": "node_modules/.bin/mocha ./tests/util/setup.js ./tests/*"
@@ -10,6 +10,8 @@
     "slack",
     "sdk",
     "api",
+    "javascript",
+    "browserify",
     "upload"
   ],
   "author": "Fred K. Schott <fkschott@gmail.com>",
@@ -20,12 +22,12 @@
   },
   "dependencies": {
     "object-assign": "^2.0.0",
-    "request": "^2.55.0",
-    "sinon": "^1.14.1"
+    "request": "^2.55.0"
   },
   "devDependencies": {
     "eslint": "^0.20.0",
     "mocha": "^2.2.4",
+    "sinon": "^1.14.1",
     "proxyquire": "^1.4.0"
   }
 }
