@@ -41,12 +41,27 @@ describe('SlackAPIClient', function() {
 
   describe('.makeRequest()', function() {
 
-    var requestOptions = {foo: 'bar'};
+    var requestOptions;
+
+    beforeEach(function() {
+      requestOptions = {foo: 'bar'};
+    });
 
     it('should pass options argument to the request function when called', function() {
       slackAPIClient.makeRequest(requestOptions);
       assert(requestStub.called);
       assert(requestStub.calledWith(requestOptions));
+    });
+
+    it('should set the `json` request option if it has not been set when called', function() {
+      slackAPIClient.makeRequest(requestOptions);
+      assert(requestStub.calledWithMatch({json: true}));
+    });
+
+    it('should not set the `json` request option if it has already been set when called', function() {
+      requestOptions.json = false;
+      slackAPIClient.makeRequest(requestOptions);
+      assert(requestStub.calledWithMatch({json: false}));
     });
 
     it('should propagate any request error to the callback when one occurs', function(done) {
@@ -93,7 +108,7 @@ describe('SlackAPIClient', function() {
 
     it('should always set the correct default request arguments when called', function() {
       slackAPIClient.api('TEST_METHOD');
-      assert(makeRequestStub.calledWithMatch({json: true, method: 'GET'}));
+      assert(makeRequestStub.calledWithMatch({method: 'GET'}));
     });
 
     it('should append the token to the query string when called', function() {
