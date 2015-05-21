@@ -49,25 +49,23 @@ describe('SlackAPIClient', function() {
       assert(requestStub.calledWith(requestOptions));
     });
 
-    it('should propagate any request error to the callback', function(done) {
+    it('should propagate any request error to the callback when one occurs', function(done) {
       var requestError = new Error('[TEST] request() error');
       requestStub.yields(requestError);
-      slackAPIClient.makeRequest(requestOptions, function(err, body, response) {
+      slackAPIClient.makeRequest(requestOptions, function(err, response) {
         assert.equal(err, requestError);
-        assert.equal(body, undefined);
         assert.equal(response, undefined);
         done();
       });
     });
 
-    it('should return the response body and response object to the callback in that order', function(done) {
-      var responseObj = {response: true};
+    it('should return the response body to the callback when the response is successfully returned', function(done) {
       var responseBody = {body: true};
-      requestStub.yields(null, responseObj, responseBody);
-      slackAPIClient.makeRequest(requestOptions, function(err, body, response) {
+      var responseObj = {response: true, body: responseBody};
+      requestStub.yields(null, responseObj);
+      slackAPIClient.makeRequest(requestOptions, function(err, response) {
         assert.equal(err, null);
-        assert.equal(body, responseBody);
-        assert.equal(response, responseObj);
+        assert.equal(response, responseBody);
         done();
       });
     });

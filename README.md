@@ -54,7 +54,7 @@ var slackAPIClient = slackAPI.getClient('USER_ACCESS_TOKEN');
 
 ### Make Calls to the API
 
-**`slackAPIClient.api(method, [arguments,] [callback])`**  - Call any Slack API method with an optional set of arguments. Authentication is automatically inherited from the client's authorized access token.
+**`slackAPIClient.api(method, [arguments,] [callback(err, responseBody)])`**  - Call any Slack API method with an optional set of arguments. Authentication is automatically inherited from the client's authorized access token.
 
 ```js
 // Get the list of users on your team
@@ -79,7 +79,3 @@ slackAPIClient.api('chat.postMessage',
 #### Errors
 
 An error object will only be propagated if there was a problem making the actual request or recieving the actual response. All completed responses, even those that resulted in erroneus status codes or with `ok: false` will be propagated to the consumer without an error.
-
-#### Additional Response Info
-
-The body of a Slack API response will usually have [all the information you need](https://api.slack.com/web#basics) about the success or failure of a request. However, if you do need access to the full response object (provided by [request](https://github.com/request/request)) it is provided as an optional third argument to the callback. Use as needed.
