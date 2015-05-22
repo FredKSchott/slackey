@@ -6,6 +6,7 @@
 
 var assert = require('assert');
 var SlackAPIClient = require('./lib/api-client');
+var SlackError = require('./lib/slack-error');
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -30,6 +31,9 @@ var SlackAPI = module.exports = function SlackAPI(config) {
   this.apiURL = config.apiURL || 'https://slack.com/api/';
   this.authRedirectURI = config.authRedirectURI;
 };
+
+/** @type {SlackError} Attach the custom type to the SlackAPI for consumer access */
+SlackAPI.prototype.SlackError = SlackError;
 
 /**
  * Return a newly initialized client with the provided access token. You can use this client to interact

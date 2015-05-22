@@ -78,6 +78,26 @@ slackAPIClient.api('chat.postMessage',
 );
 ```
 
-#### Errors
+### Errors
 
-An error object will only be propagated if there was a problem making the actual request or recieving the actual response. All completed responses, even those that resulted in erroneus status codes or with `ok: false` will be propagated to the consumer without an error.
+Any error object that occurs while making the request or recieving the response will be propagated to the callback.
+
+Any failed results from the Slack API (where `ok: false`) will propagate a custom `SlackError` error with the error message provided by Slack. Check for this type of error specifically to handle all possible, expected error case.
+
+
+```js
+slackAPIClient.api('channels.create', {name: 'mychannel'}, function(err, response) {
+  if (err) {
+    if (err.message === 'name_taken') {
+      // Handle the case where the channel name already exists
+    } else if (err.message === 'restricted_action') {
+      // Handle the case where the authed user is restricted from doing this
+    } else if (err instanceOf slackAPIClient.SlackError) {
+      // Handle all possible slack errors
+    } else {
+      // Handle all other errors, like errors making the request/response
+    }
+  }
+  // Handle the successful response...
+);
+```

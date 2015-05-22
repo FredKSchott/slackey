@@ -3,6 +3,7 @@
 var assert = require('assert');
 var proxyquire = require('proxyquire');
 var SlackAPIClient = require('../lib/api-client');
+var SlackError = require('../lib/slack-error');
 
 var SlackAPI;
 var SlackAPIClientSpy;
@@ -42,6 +43,15 @@ describe('SlackAPI', function() {
         clientSecret: 'XXX'
       });
       assert.equal(slackAPI.apiURL, 'https://slack.com/api/');
+    });
+
+  });
+
+  describe('.SlackError', function() {
+
+    it('is the custom error type SlackError', function() {
+      var slackAPI = new SlackAPI();
+      assert.equal(slackAPI.SlackError, SlackError);
     });
 
   });

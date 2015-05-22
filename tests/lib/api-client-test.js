@@ -2,6 +2,7 @@
 
 var assert = require('assert');
 var proxyquire = require('proxyquire');
+var SlackError = require('../../lib/slack-error');
 
 var SlackAPIClient;
 var slackAPIClient;
@@ -39,6 +40,14 @@ describe('SlackAPIClient', function() {
 
   });
 
+  describe('.SlackError', function() {
+
+    it('is the custom error type SlackError', function() {
+      assert.equal(slackAPIClient.SlackError, SlackError);
+    });
+
+  });
+
   describe('.makeRequest()', function() {
 
     var requestOptions;
@@ -64,6 +73,17 @@ describe('SlackAPIClient', function() {
       assert(requestStub.calledWithMatch({json: false}));
     });
 
+    it('should return the response body to the callback when the response is successfully returned', function(done) {
+      var responseBody = {ok: true};
+      var responseObj = {response: true, body: responseBody};
+      requestStub.yields(null, responseObj);
+      slackAPIClient.makeRequest(requestOptions, function(err, response) {
+        assert.equal(err, null);
+        assert.equal(response, responseBody);
+        done();
+      });
+    });
+
     it('should propagate any request error to the callback when one occurs', function(done) {
       var requestError = new Error('[TEST] request() error');
       requestStub.yields(requestError);
@@ -74,13 +94,13 @@ describe('SlackAPIClient', function() {
       });
     });
 
-    it('should return the response body to the callback when the response is successfully returned', function(done) {
-      var responseBody = {body: true};
+    it('should propagate a SlackError object with the Slack error message when the Slack response is bad', function(done) {
+      var responseBody = {ok: false, error: 'some_error_string'};
       var responseObj = {response: true, body: responseBody};
       requestStub.yields(null, responseObj);
       slackAPIClient.makeRequest(requestOptions, function(err, response) {
-        assert.equal(err, null);
-        assert.equal(response, responseBody);
+        assert(err instanceof SlackError);
+        assert.equal(err.message, responseBody.error);
         done();
       });
     });
