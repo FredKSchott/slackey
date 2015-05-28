@@ -7,13 +7,16 @@ var SlackError = require('../lib/slack-error');
 
 var SlackAPI;
 var SlackAPIClientSpy;
+var makeAPIRequestStub;
 
 describe('SlackAPI', function() {
 
   beforeEach(function() {
+    makeAPIRequestStub = this.sinon.stub();
     SlackAPIClientSpy = this.sinon.spy(SlackAPIClient);
     SlackAPI = proxyquire('../index.js', {
-      './lib/api-client': SlackAPIClientSpy
+      './lib/api-client': SlackAPIClientSpy,
+      './lib/make-api-request': makeAPIRequestStub
     });
   });
 
@@ -91,12 +94,11 @@ describe('SlackAPI', function() {
 
     it('should POST to the oauth.access method with the correct form fields when called', function(done) {
       var slackAPI = new SlackAPI({clientID: 'XXX', clientSecret: 'YYY', authRedirectURI: 'ZZZ'});
-      var makeRequestStub = this.sinon.stub(SlackAPIClient.prototype, 'makeRequest');
-      makeRequestStub.yields();
+      makeAPIRequestStub.yields();
 
       slackAPI.getAccessToken({code: 'AUTH_CODE', redirectURI: 'REDIRECT_URL'}, function() {
-        assert(makeRequestStub.calledOnce);
-        assert.deepEqual(makeRequestStub.firstCall.args[0], {
+        assert(makeAPIRequestStub.calledOnce);
+        assert.deepEqual(makeAPIRequestStub.firstCall.args[0], {
           url: 'https://slack.com/api/oauth.access',
           method: 'POST',
           form: {
@@ -112,12 +114,11 @@ describe('SlackAPI', function() {
 
     it('should use the default authRedirectURI when redirectURI option is not provided', function(done) {
       var slackAPI = new SlackAPI({clientID: 'XXX', clientSecret: 'YYY', authRedirectURI: 'ZZZ'});
-      var makeRequestStub = this.sinon.stub(SlackAPIClient.prototype, 'makeRequest');
-      makeRequestStub.yields();
+      makeAPIRequestStub.yields();
 
       slackAPI.getAccessToken({code: 'AUTH_CODE'}, function() {
-        assert(makeRequestStub.calledOnce);
-        assert.deepEqual(makeRequestStub.firstCall.args[0], {
+        assert(makeAPIRequestStub.calledOnce);
+        assert.deepEqual(makeAPIRequestStub.firstCall.args[0], {
           url: 'https://slack.com/api/oauth.access',
           method: 'POST',
           form: {
