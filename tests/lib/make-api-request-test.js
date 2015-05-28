@@ -39,13 +39,14 @@ describe('makeAPIRequest', function() {
     assert(requestStub.calledWithMatch({json: false}));
   });
 
-  it('should return the response body to the callback when the response is successfully returned', function(done) {
-    var responseBody = {ok: true};
+  it('should return the response body (without ok property) to the callback when the response is successfully returned', function(done) {
+    var responseBody = {ok: true, user_id: 'foobar'};
+    var expectedResponseBody = {user_id: 'foobar'};
     var responseObj = {response: true, body: responseBody};
     requestStub.yields(null, responseObj);
     makeAPIRequest(requestOptions, function(err, response) {
       assert.equal(err, null);
-      assert.equal(response, responseBody);
+      assert.deepEqual(response, expectedResponseBody);
       done();
     });
   });

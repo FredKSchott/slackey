@@ -62,7 +62,7 @@ var slackAPIClient = slackAPI.getClient('USER_ACCESS_TOKEN');
 // Get the list of users on your team
 slackAPIClient.api('users.list', function(err, response) {
   console.log(err, response);
-  // null {ok: true, members: ...
+  // null {members: ...
 });
 
 // Post a message from your application
@@ -73,10 +73,13 @@ slackAPIClient.api('chat.postMessage',
   },
   function(err, response) {
     console.log(err, response);
-    // null {ok: true, channel: ...
+    // null {channel: ...
   }
 );
 ```
+
+*Note on `responseBody` object: Because the response body is only propagated when `ok: true` (see Errors section below) we remove that property from the response that we return. We do this because it is redundant, and so that all properties are related to the resource/response and not the status of that response.*
+
 
 ### Errors
 
