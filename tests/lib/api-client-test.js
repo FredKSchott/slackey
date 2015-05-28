@@ -95,7 +95,7 @@ describe('SlackAPIClient', function() {
       var contentData = 'TEST_UPLOAD_CONTENT';
       var methodOptions = {content: contentData};
       slackAPIClient.api('files.upload', methodOptions);
-      assert(makeAPIRequestStub.calledWithMatch({form: {content: contentData}}));
+      assert(makeAPIRequestStub.calledWithMatch({body: {content: contentData}}));
     });
 
   });
