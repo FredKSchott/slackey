@@ -7,6 +7,7 @@
 var assert = require('assert');
 var SlackAPIClient = require('./lib/api-client');
 var SlackError = require('./lib/slack-error');
+var makeAPIRequest = require('./lib/make-api-request');
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -77,6 +78,6 @@ SlackAPI.prototype.getAccessToken = function(options, callback) {
       redirect_uri: redirectURI,
     }
   };
-  SlackAPIClient.prototype.makeRequest(requestOptions, callback);
+  makeAPIRequest(requestOptions, callback);
 };
 
