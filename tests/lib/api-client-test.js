@@ -77,6 +77,17 @@ describe('SlackAPIClient', function() {
       assert(makeAPIRequestStub.calledWithMatch({qs: {foo: 'bar', token: 'XXX'}}));
     });
 
+    it('should stringify the attachments argument when an array is provided to the "chat.postMessage" method', function() {
+      var methodOptions = {attachments: [{text: 'foobar'}]};
+      slackAPIClient.api('chat.postMessage', methodOptions);
+      assert(makeAPIRequestStub.calledWithMatch({method: 'GET', qs: {attachments: '[{"text":"foobar"}]', token: 'XXX'}}));
+    });
+
+    it('should not modify the attachments argument when an string is provided to the "chat.postMessage" method', function() {
+      var methodOptions = {attachments: '[{"text":"foobar"}]'};
+      slackAPIClient.api('chat.postMessage', methodOptions);
+      assert(makeAPIRequestStub.calledWithMatch({method: 'GET', qs: {attachments: '[{"text":"foobar"}]', token: 'XXX'}}));
+    });
 
     it('should POST when called with "files.upload" method', function() {
       slackAPIClient.api('files.upload');
