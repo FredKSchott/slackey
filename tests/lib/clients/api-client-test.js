@@ -2,7 +2,7 @@
 
 var assert = require('assert');
 var proxyquire = require('proxyquire');
-var SlackError = require('../../lib/slack-error');
+var SlackError = require('../../../lib/slack-error');
 
 var SlackAPIClient;
 var slackAPIClient;
@@ -13,29 +13,35 @@ describe('SlackAPIClient', function() {
 
   beforeEach(function() {
     makeAPIRequestStub = this.sinon.stub();
-    SlackAPIClient = proxyquire('../../lib/api-client.js', {
-      './make-api-request': makeAPIRequestStub
+    SlackAPIClient = proxyquire('../../../lib/clients/api-client.js', {
+      '../make-api-request': makeAPIRequestStub
     });
     slackAPIClient = new SlackAPIClient({
       token: 'XXX',
-      apiURL: 'YYY',
+      apiURL: 'YYY'
     });
   });
 
   describe('constructor', function() {
 
     it('should return a SlackAPIClient object when called', function() {
-      var createdSlackAPIClient = new SlackAPIClient();
-      assert.ok(createdSlackAPIClient instanceof SlackAPIClient);
+      assert.ok(slackAPIClient instanceof SlackAPIClient);
     });
 
     it('should set the provided options when called with options', function() {
       var createdSlackAPIClient = new SlackAPIClient({
         token: 'XXX',
-        apiURL: 'YYY',
+        apiURL: 'YYY'
       });
       assert.equal(createdSlackAPIClient.token, 'XXX');
       assert.equal(createdSlackAPIClient.apiURL, 'YYY');
+    });
+
+    it('should default the API URL to "https://slack.com/api/" when called without the apiURL option', function() {
+      var createdSlackAPIClient = new SlackAPIClient({
+        token: 'XXX'
+      });
+      assert.equal(createdSlackAPIClient.apiURL, 'https://slack.com/api/');
     });
 
   });
@@ -100,7 +106,6 @@ describe('SlackAPIClient', function() {
       slackAPIClient.send('files.upload', methodOptions);
       assert(makeAPIRequestStub.calledWithMatch({formData: {file: fileData}}));
     });
-
 
     it('should attach the content option as form body data when called with "file.upload" method', function() {
       var contentData = 'TEST_UPLOAD_CONTENT';
