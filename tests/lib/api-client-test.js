@@ -48,56 +48,56 @@ describe('SlackAPIClient', function() {
 
   });
 
-  describe('.api()', function() {
+  describe('.send()', function() {
 
     it('should create the URL from the apiURL property and the method argument when called', function() {
-      slackAPIClient.api('TEST_METHOD');
+      slackAPIClient.send('TEST_METHOD');
       assert(makeAPIRequestStub.called);
       assert(makeAPIRequestStub.calledWithMatch({url: 'YYYTEST_METHOD'}));
     });
 
     it('should still call the provided callback when no options argument is provided', function(done) {
       makeAPIRequestStub.yields();
-      slackAPIClient.api('TEST_METHOD', done);
+      slackAPIClient.send('TEST_METHOD', done);
     });
 
     it('should always set the correct default request arguments when called', function() {
-      slackAPIClient.api('TEST_METHOD');
+      slackAPIClient.send('TEST_METHOD');
       assert(makeAPIRequestStub.calledWithMatch({method: 'GET'}));
     });
 
     it('should append the token to the query string when called', function() {
-      slackAPIClient.api('TEST_METHOD');
+      slackAPIClient.send('TEST_METHOD');
       assert(makeAPIRequestStub.calledWithMatch({qs: {token: 'XXX'}}));
     });
 
     it('should pass the provided options as query params via GET when called on a normal method', function() {
       var methodOptions = {foo: 'bar'};
-      slackAPIClient.api('TEST_METHOD', methodOptions);
+      slackAPIClient.send('TEST_METHOD', methodOptions);
       assert(makeAPIRequestStub.calledWithMatch({qs: {foo: 'bar', token: 'XXX'}}));
     });
 
     it('should stringify the attachments argument when an array is provided to the "chat.postMessage" method', function() {
       var methodOptions = {attachments: [{text: 'foobar'}]};
-      slackAPIClient.api('chat.postMessage', methodOptions);
+      slackAPIClient.send('chat.postMessage', methodOptions);
       assert(makeAPIRequestStub.calledWithMatch({method: 'GET', qs: {attachments: '[{"text":"foobar"}]', token: 'XXX'}}));
     });
 
     it('should not modify the attachments argument when an string is provided to the "chat.postMessage" method', function() {
       var methodOptions = {attachments: '[{"text":"foobar"}]'};
-      slackAPIClient.api('chat.postMessage', methodOptions);
+      slackAPIClient.send('chat.postMessage', methodOptions);
       assert(makeAPIRequestStub.calledWithMatch({method: 'GET', qs: {attachments: '[{"text":"foobar"}]', token: 'XXX'}}));
     });
 
     it('should POST when called with "files.upload" method', function() {
-      slackAPIClient.api('files.upload');
+      slackAPIClient.send('files.upload');
       assert(makeAPIRequestStub.calledWithMatch({method: 'POST'}));
     });
 
     it('should attach the file option as form-upload data when called with "file.upload" method', function() {
       var fileData = new Buffer(123);
       var methodOptions = {file: fileData};
-      slackAPIClient.api('files.upload', methodOptions);
+      slackAPIClient.send('files.upload', methodOptions);
       assert(makeAPIRequestStub.calledWithMatch({formData: {file: fileData}}));
     });
 
@@ -105,7 +105,7 @@ describe('SlackAPIClient', function() {
     it('should attach the content option as form body data when called with "file.upload" method', function() {
       var contentData = 'TEST_UPLOAD_CONTENT';
       var methodOptions = {content: contentData};
-      slackAPIClient.api('files.upload', methodOptions);
+      slackAPIClient.send('files.upload', methodOptions);
       assert(makeAPIRequestStub.calledWithMatch({body: 'content=TEST_UPLOAD_CONTENT'}));
     });
 

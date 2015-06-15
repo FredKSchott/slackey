@@ -3,10 +3,12 @@
 var assert = require('assert');
 var proxyquire = require('proxyquire');
 var SlackAPIClient = require('../lib/api-client');
+var SlackWebhookClient = require('../lib/webhook-client');
 var SlackError = require('../lib/slack-error');
 
 var SlackAPI;
 var SlackAPIClientSpy;
+var SlackWebhookClientSpy;
 var makeAPIRequestStub;
 
 describe('SlackAPI', function() {
@@ -14,8 +16,10 @@ describe('SlackAPI', function() {
   beforeEach(function() {
     makeAPIRequestStub = this.sinon.stub();
     SlackAPIClientSpy = this.sinon.spy(SlackAPIClient);
+    SlackWebhookClientSpy = this.sinon.spy(SlackWebhookClient);
     SlackAPI = proxyquire('../index.js', {
       './lib/api-client': SlackAPIClientSpy,
+      './lib/webhook-client': SlackWebhookClientSpy,
       './lib/make-api-request': makeAPIRequestStub
     });
   });
@@ -59,19 +63,36 @@ describe('SlackAPI', function() {
 
   });
 
-  describe('.getClient()', function() {
+  describe('.getAPIClient()', function() {
 
     it('should return a SlackAPIClient object when called', function() {
       var slackAPI = new SlackAPI();
-      var slackAPIClient = slackAPI.getClient('TOKEN');
+      var slackAPIClient = slackAPI.getAPIClient('TOKEN');
       assert.ok(slackAPIClient instanceof SlackAPIClient);
     });
 
     it('should pass the token and API URL to the SlackAPIClient constructor when called', function() {
       var slackAPI = new SlackAPI({apiURL: 'SLACK_API_URL'});
-      slackAPI.getClient('TOKEN');
+      slackAPI.getAPIClient('TOKEN');
       assert(SlackAPIClientSpy.calledWithNew());
       assert(SlackAPIClientSpy.calledWith({token: 'TOKEN', apiURL: 'SLACK_API_URL'}));
+    });
+
+  });
+
+  describe('.getWebhookClient()', function() {
+
+    it('should return a SlackWebhookClient object when called', function() {
+      var slackAPI = new SlackAPI();
+      var slackWebhookClient = slackAPI.getWebhookClient('WEBHOOK_URL');
+      assert.ok(slackWebhookClient instanceof SlackWebhookClient);
+    });
+
+    it('should pass the token and API URL to the SlackWebhookClient constructor when called', function() {
+      var slackAPI = new SlackAPI({apiURL: 'SLACK_API_URL'});
+      slackAPI.getWebhookClient('WEBHOOK_URL');
+      assert(SlackWebhookClientSpy.calledWithNew());
+      assert(SlackWebhookClientSpy.calledWith({webhookURL: 'WEBHOOK_URL'}));
     });
 
   });

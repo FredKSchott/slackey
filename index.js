@@ -6,6 +6,7 @@
 
 var assert = require('assert');
 var SlackAPIClient = require('./lib/api-client');
+var SlackWebhookClient = require('./lib/webhook-client');
 var SlackError = require('./lib/slack-error');
 var makeAPIRequest = require('./lib/make-api-request');
 
@@ -37,18 +38,32 @@ var SlackAPI = module.exports = function SlackAPI(config) {
 SlackAPI.prototype.SlackError = SlackError;
 
 /**
- * Return a newly initialized client with the provided access token. You can use this client to interact
- * with the API on behalf of the user.
+ * Return a newly initialized API client with the provided access token. You can use this client to interact
+ * with any API method on behalf of the user.
  *
  * @param  {string} token
  * @return {SlackAPIClient}
  */
-SlackAPI.prototype.getClient = function(token) {
+SlackAPI.prototype.getAPIClient = function(token) {
   return new SlackAPIClient({
     token: token,
     apiURL: this.apiURL,
   });
 };
+
+/**
+ * Return a newly initialized Webhook client with the provided webhook URL. You can use this client to
+ * send requests to the Incoming Webhook provided.
+ *
+ * @param  {string} webhookURL
+ * @return {SlackWebhookClient}
+ */
+SlackAPI.prototype.getWebhookClient = function(webhookURL) {
+  return new SlackWebhookClient({
+    webhookURL: webhookURL,
+  });
+};
+
 
 /**
  * Call the 'oauth.access' API method to exchange a fresh auth code for an authorized API access token.
