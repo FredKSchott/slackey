@@ -2,63 +2,33 @@
 
 var assert = require('assert');
 var proxyquire = require('proxyquire');
-var SlackAPIClient = require('../lib/api-client');
-var SlackWebhookClient = require('../lib/webhook-client');
+var SlackAPIClient = require('../lib/clients/api-client');
+var SlackWebhookClient = require('../lib/clients/webhook-client');
+var SlackOAuthClient = require('../lib/clients/oauth-client');
 var SlackError = require('../lib/slack-error');
 
-var SlackAPI;
+var slackey;
 var SlackAPIClientSpy;
 var SlackWebhookClientSpy;
-var makeAPIRequestStub;
+var SlackOAuthClientSpy;
 
-describe('SlackAPI', function() {
+describe('Slackey', function() {
 
   beforeEach(function() {
-    makeAPIRequestStub = this.sinon.stub();
     SlackAPIClientSpy = this.sinon.spy(SlackAPIClient);
     SlackWebhookClientSpy = this.sinon.spy(SlackWebhookClient);
-    SlackAPI = proxyquire('../index.js', {
-      './lib/api-client': SlackAPIClientSpy,
-      './lib/webhook-client': SlackWebhookClientSpy,
-      './lib/make-api-request': makeAPIRequestStub
+    SlackOAuthClientSpy = this.sinon.spy(SlackOAuthClient);
+    slackey = proxyquire('../index.js', {
+      './lib/clients/api-client': SlackAPIClientSpy,
+      './lib/clients/webhook-client': SlackWebhookClientSpy,
+      './lib/clients/oauth-client': SlackOAuthClientSpy
     });
-  });
-
-  describe('constructor', function() {
-
-    it('should return a SlackAPI object when called', function() {
-      var slackAPI = new SlackAPI();
-      assert.ok(slackAPI instanceof SlackAPI);
-    });
-
-    it('should set the provided options when called with options', function() {
-      var slackAPI = new SlackAPI({
-        clientID: 'WWW',
-        clientSecret: 'XXX',
-        apiURL: 'YYY',
-        authRedirectURI: 'ZZZ',
-      });
-      assert.equal(slackAPI.clientID, 'WWW');
-      assert.equal(slackAPI.clientSecret, 'XXX');
-      assert.equal(slackAPI.apiURL, 'YYY');
-      assert.equal(slackAPI.authRedirectURI, 'ZZZ');
-    });
-
-    it('should set the default apiURL when called without that option', function() {
-      var slackAPI = new SlackAPI({
-        clientID: 'WWW',
-        clientSecret: 'XXX'
-      });
-      assert.equal(slackAPI.apiURL, 'https://slack.com/api/');
-    });
-
   });
 
   describe('.SlackError', function() {
 
     it('is the custom error type SlackError', function() {
-      var slackAPI = new SlackAPI();
-      assert.equal(slackAPI.SlackError, SlackError);
+      assert.equal(slackey.SlackError, SlackError);
     });
 
   });
@@ -66,16 +36,26 @@ describe('SlackAPI', function() {
   describe('.getAPIClient()', function() {
 
     it('should return a SlackAPIClient object when called', function() {
-      var slackAPI = new SlackAPI();
-      var slackAPIClient = slackAPI.getAPIClient('TOKEN');
+      var slackAPIClient = slackey.getAPIClient('ACCESS_TOKEN');
       assert.ok(slackAPIClient instanceof SlackAPIClient);
     });
 
-    it('should pass the token and API URL to the SlackAPIClient constructor when called', function() {
-      var slackAPI = new SlackAPI({apiURL: 'SLACK_API_URL'});
-      slackAPI.getAPIClient('TOKEN');
+    it('should pass the token to the SlackOAuthClient constructor when called with a string', function() {
+      slackey.getAPIClient('ACCESS_TOKEN');
       assert(SlackAPIClientSpy.calledWithNew());
-      assert(SlackAPIClientSpy.calledWith({token: 'TOKEN', apiURL: 'SLACK_API_URL'}));
+      assert(SlackAPIClientSpy.calledWith({token: 'ACCESS_TOKEN'}));
+    });
+
+    it('should pass the configuration options to the SlackOAuthClient constructor when called with an object', function() {
+      slackey.getAPIClient({token: 'ACCESS_TOKEN', apiURL: 'SLACK_API_URL'});
+      assert(SlackAPIClientSpy.calledWithNew());
+      assert(SlackAPIClientSpy.calledWith({token: 'ACCESS_TOKEN', apiURL: 'SLACK_API_URL'}));
+    });
+
+    it('should throw an assertion error when called without a "token" option', function() {
+      assert.throws(function() {
+        slackey.getAPIClient({apiURL: 'SLACK_API_URL'});
+      }, assert.AssertionError);
     });
 
   });
@@ -83,74 +63,38 @@ describe('SlackAPI', function() {
   describe('.getWebhookClient()', function() {
 
     it('should return a SlackWebhookClient object when called', function() {
-      var slackAPI = new SlackAPI();
-      var slackWebhookClient = slackAPI.getWebhookClient('WEBHOOK_URL');
+      var slackWebhookClient = slackey.getWebhookClient('WEBHOOK_URL');
       assert.ok(slackWebhookClient instanceof SlackWebhookClient);
     });
 
-    it('should pass the token and API URL to the SlackWebhookClient constructor when called', function() {
-      var slackAPI = new SlackAPI({apiURL: 'SLACK_API_URL'});
-      slackAPI.getWebhookClient('WEBHOOK_URL');
+    it('should pass the token to the SlackWebhookClient constructor when called', function() {
+      slackey.getWebhookClient('WEBHOOK_URL');
       assert(SlackWebhookClientSpy.calledWithNew());
       assert(SlackWebhookClientSpy.calledWith({webhookURL: 'WEBHOOK_URL'}));
     });
 
   });
 
-  describe('.getAccessToken()', function() {
+  describe('.getOAuthClient()', function() {
 
-    it('should throw an assertion error when clientID has not been set', function() {
-      var slackAPI = new SlackAPI({clientSecret: 'XXX'});
+    it('should throw an assertion error when called without a "clientID" option', function() {
       assert.throws(function() {
-        slackAPI.getAccessToken({code: 'AUTH_CODE'});
+        slackey.getOAuthClient({clientSecret: 'YYY'});
       }, assert.AssertionError);
     });
 
-    it('should throw an assertion error when clientSecret has not been set', function() {
-      var slackAPI = new SlackAPI({clientID: 'XXX'});
+    it('should throw an assertion error when called without a "clientSecret" option', function() {
       assert.throws(function() {
-        slackAPI.getAccessToken({code: 'AUTH_CODE'});
+        slackey.getOAuthClient({clientID: 'XXX'});
       }, assert.AssertionError);
     });
 
-    it('should POST to the oauth.access method with the correct form fields when called', function(done) {
-      var slackAPI = new SlackAPI({clientID: 'XXX', clientSecret: 'YYY', authRedirectURI: 'ZZZ'});
-      makeAPIRequestStub.yields();
-
-      slackAPI.getAccessToken({code: 'AUTH_CODE', redirectURI: 'REDIRECT_URL'}, function() {
-        assert(makeAPIRequestStub.calledOnce);
-        assert.deepEqual(makeAPIRequestStub.firstCall.args[0], {
-          url: 'https://slack.com/api/oauth.access',
-          method: 'POST',
-          form: {
-            client_id: 'XXX',
-            client_secret: 'YYY',
-            code: 'AUTH_CODE',
-            redirect_uri: 'REDIRECT_URL'
-          }
-        });
-        done();
+    it('should return a SlackOAuthClient object when called with the correct options', function() {
+      var slackWebhookClient = slackey.getOAuthClient({
+        clientID: 'XXX',
+        clientSecret: 'YYY'
       });
-    });
-
-    it('should use the default authRedirectURI when redirectURI option is not provided', function(done) {
-      var slackAPI = new SlackAPI({clientID: 'XXX', clientSecret: 'YYY', authRedirectURI: 'ZZZ'});
-      makeAPIRequestStub.yields();
-
-      slackAPI.getAccessToken({code: 'AUTH_CODE'}, function() {
-        assert(makeAPIRequestStub.calledOnce);
-        assert.deepEqual(makeAPIRequestStub.firstCall.args[0], {
-          url: 'https://slack.com/api/oauth.access',
-          method: 'POST',
-          form: {
-            client_id: 'XXX',
-            client_secret: 'YYY',
-            code: 'AUTH_CODE',
-            redirect_uri: 'ZZZ'
-          }
-        });
-        done();
-      });
+      assert.ok(slackWebhookClient instanceof SlackOAuthClient);
     });
 
   });
