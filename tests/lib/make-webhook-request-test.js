@@ -19,7 +19,10 @@ describe('makeWebhookRequest', function() {
   var requestOptions;
 
   beforeEach(function() {
-    requestOptions = {foo: 'bar'};
+    requestOptions = {
+      url: 'https://SOME.WEBHOOK.URL',
+      foo: 'bar'
+    };
   });
 
   it('should pass options argument to the request function when called', function() {
@@ -49,13 +52,15 @@ describe('makeWebhookRequest', function() {
     });
   });
 
-  it('should propagate a SlackError object with the Slack response body message when the Slack response is bad', function(done) {
+  it('should propagate a SlackError object with error request/response information when the Slack response is bad', function(done) {
     var responseBody = 'Payload was not valid JSON';
-    var responseObj = {response: true, body: responseBody};
+    var responseObj = {request: {href: requestOptions.url}, body: responseBody};
     requestStub.yields(null, responseObj);
     makeWebhookRequest(requestOptions, function(err, response) {
       assert(err instanceof SlackError);
       assert.equal(err.message, responseBody);
+      assert.equal(err.requestURL, requestOptions.url);
+      assert.equal(err.responseBody, responseBody);
       done();
     });
   });
