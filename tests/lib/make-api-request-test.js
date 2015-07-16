@@ -19,7 +19,10 @@ describe('makeAPIRequest', function() {
   var requestOptions;
 
   beforeEach(function() {
-    requestOptions = {foo: 'bar'};
+    requestOptions = {
+      url: 'https://slack.com/api/TEST',
+      foo: 'bar'
+    };
   });
 
   it('should pass options argument to the request function when called', function() {
@@ -61,13 +64,15 @@ describe('makeAPIRequest', function() {
     });
   });
 
-  it('should propagate a SlackError object with the Slack error message when the Slack response is bad', function(done) {
+  it('should propagate a SlackError object with error request/response information when the Slack response is bad', function(done) {
     var responseBody = {ok: false, error: 'some_error_string'};
-    var responseObj = {response: true, body: responseBody};
+    var responseObj = {request: {href: requestOptions.url}, body: responseBody};
     requestStub.yields(null, responseObj);
     makeAPIRequest(requestOptions, function(err, response) {
       assert(err instanceof SlackError);
       assert.equal(err.message, responseBody.error);
+      assert.equal(err.requestURL, requestOptions.url);
+      assert.equal(err.responseBody, responseBody);
       done();
     });
   });
