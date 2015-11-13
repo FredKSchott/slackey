@@ -32,8 +32,7 @@ var slackAPIClient = slackey.getAPIClient('USER_ACCESS_TOKEN');
 ```js
 // Get the list of users on your team
 slackAPIClient.send('users.list', function(err, response) {
-  console.log(err, response);
-  // null {members: ...
+  console.log(err, response); // null {members: ...
 });
 
 // Post a message from your application
@@ -43,8 +42,7 @@ slackAPIClient.send('chat.postMessage',
     channel: '#channel'
   },
   function(err, response) {
-    console.log(err, response);
-    // null {channel: ...
+    console.log(err, response); // null {channel: ...
   }
 );
 ```
@@ -95,9 +93,8 @@ Supported options:
 - `redirectURI`: The redirect URI used to get the provided auth code, if one was provided. Defaults to the `authRedirectURI` value provided to the constructor.
 
 ```js
-slackey.getAccessToken('USER_AUTH_CODE', {redirectURI: 'http://localhost:5000/slack'}, function(err, response) {
-  console.log(err, response);
-  // null {access_token: 'XXX', scope: 'read'}
+slackOAuthClient.getToken('USER_AUTH_CODE', {redirectURI: 'http://localhost:5000/slack'}, function(err, response) {
+  console.log(err, response); // null {access_token: 'XXX', scope: 'read'}
 }
 ```
 
