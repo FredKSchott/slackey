@@ -83,16 +83,24 @@ describe('SlackAPIClient', function() {
       assert(makeAPIRequestStub.calledWithMatch({qs: {foo: 'bar', token: 'XXX'}}));
     });
 
-    it('should stringify the attachments argument when an array is provided to the "chat.postMessage" method', function() {
+    it('should correctly strinfigy the request body when an array is provided to the "chat.postMessage" method', function() {
       var methodOptions = {attachments: [{text: 'foobar'}]};
       slackAPIClient.send('chat.postMessage', methodOptions);
-      assert(makeAPIRequestStub.calledWithMatch({method: 'GET', qs: {attachments: '[{"text":"foobar"}]', token: 'XXX'}}));
+      assert(makeAPIRequestStub.calledWithMatch({
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'attachments=%5B%7B%22text%22%3A%22foobar%22%7D%5D&token=XXX' 
+      }));
     });
 
-    it('should not modify the attachments argument when an string is provided to the "chat.postMessage" method', function() {
+    it('should correctly strinfigy the request body when a string is provided to the "chat.postMessage" method', function() {
       var methodOptions = {attachments: '[{"text":"foobar"}]'};
       slackAPIClient.send('chat.postMessage', methodOptions);
-      assert(makeAPIRequestStub.calledWithMatch({method: 'GET', qs: {attachments: '[{"text":"foobar"}]', token: 'XXX'}}));
+      assert(makeAPIRequestStub.calledWithMatch({
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'attachments=%5B%7B%22text%22%3A%22foobar%22%7D%5D&token=XXX'
+      }));
     });
 
     it('should POST when called with "files.upload" method', function() {
