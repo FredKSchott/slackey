@@ -17,14 +17,19 @@ npm install --save slackey
 ## Usage
 
 ```js
-var slackey = require('slackey');
+let slackey = require('slackey');
 ```
 
+Slackey uses three different types of clients for communicating with Slack, based on your use case:
 
-### Make Calls to the Web API
+- **API Client:** Make calls to the Web API on behalf of one user (via their access token)
+- **Oauth Client:** Make calls to the OAuth API to create new access tokens for new users
+- **Webhook Client:** Make calls to any incoming webhook
+
+### API Client - Make Calls to the Web API
 
 ```js
-var slackAPIClient = slackey.getAPIClient('USER_ACCESS_TOKEN');
+let slackAPIClient = slackey.getAPIClient('USER_ACCESS_TOKEN');
 ```
 
 **`slackAPIClient.send(method, [arguments,] [callback(err, responseBody)])`**  - Call any Slack API method with an optional set of arguments. Authentication is automatically inherited from the client's authorized access token.
@@ -32,7 +37,7 @@ var slackAPIClient = slackey.getAPIClient('USER_ACCESS_TOKEN');
 ```js
 // Get the list of users on your team
 slackAPIClient.send('users.list', function(err, response) {
-  console.log(err, response); // null {members: ...
+  console.log(err, response); // null, {members: ...
 });
 
 // Post a message from your application
@@ -42,7 +47,7 @@ slackAPIClient.send('chat.postMessage',
     channel: '#channel'
   },
   function(err, response) {
-    console.log(err, response); // null {channel: ...
+    console.log(err, response); // null, {channel: ...
   }
 );
 ```
@@ -74,10 +79,10 @@ slackAPIClient.send('channels.create', {name: 'mychannel'}, function(err, respon
 ```
 
 
-### Authorize New Users
+### Oauth Client - Authorize New Users
 
 ```js
-var slackOAuthClient = slackey.getOAuthClient({
+let slackOAuthClient = slackey.getOAuthClient({
   // Required
   clientID:
   clientSecret:
@@ -94,7 +99,7 @@ Supported options:
 
 ```js
 slackOAuthClient.getToken('USER_AUTH_CODE', {redirectURI: 'http://localhost:5000/slack'}, function(err, response) {
-  console.log(err, response); // null {access_token: 'XXX', scope: 'read'}
+  console.log(err, response); // null, {access_token: 'XXX', scope: 'read'}
 }
 ```
 
@@ -103,13 +108,13 @@ slackOAuthClient.getToken('USER_AUTH_CODE', {redirectURI: 'http://localhost:5000
 See **Make Calls to the Web API** "Errors" Section above.
 
 
-### Make Calls to an Incoming Webhook
+### Webhook Client - Make Calls to an Incoming Webhook
 
 ```js
-var slackWebhookClient = slackey.getWebhookClient('WEBHOOK_URL');
+let slackWebhookClient = slackey.getWebhookClient('WEBHOOK_URL');
 ```
 
-**`slackWebhookClient.send(payload, [callback(err)])`**  - Call a Slack webhook with a given set of arguments.
+**`slackWebhookClient.send(payload, [callback(err)])`**  - Call your Slack webhook with a given payload & set of arguments.
 
 ```js
 slackWebhookClient.send({
