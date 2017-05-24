@@ -1,6 +1,5 @@
-<a href="https://www.npmjs.com/package/slackey">
-  <img align="right" src="https://nodei.co/npm/slackey.png?compact=true" />
-</a>
+[![npm version](https://badge.fury.io/js/slackey.svg)](https://www.npmjs.com/package/slackey)
+
 # Slackey
 
 There are already [plenty](https://www.npmjs.com/package/node-slack) [of](https://www.npmjs.com/package/slack-api) [JavaScript](https://www.npmjs.com/package/slack-client) [libraries](https://www.npmjs.com/package/slack-node) [out there](https://www.npmjs.com/package/slack-notify) written for the Slack API. Why build another one? And more importantly, why use this one?
