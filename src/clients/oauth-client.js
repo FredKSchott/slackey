@@ -60,8 +60,8 @@ SlackOAuthClient.prototype.getToken = function(code, options, callback) {
     callback = callback || function () {/* no-op */};
   }
 
-  var redirectURI = options.redirectURI || this.authRedirectURI;
-  var requestOptions = {
+  const redirectURI = options.redirectURI || this.authRedirectURI;
+  const requestOptions = {
     url: this.apiURL + 'oauth.access',
     method: 'POST',
     form: {

@@ -1,6 +1,6 @@
+'use strict';
 
-
-import sinon from 'sinon';
+var sinon = require('sinon');
 
 beforeEach(function() {
   this.sinon = sinon.sandbox.create();

@@ -3,7 +3,21 @@
   "version": "1.1.1",
   "description": "A Dependable JavaScript SDK for the Slack API",
   "scripts": {
-    "test": "mocha -r esm --reporter dot --recursive ./tests/util/setup.js ./tests"
+    "build": "pack build",
+    "test": "echo \"tests are currently disabled due to @std/esm & proxyrequire incompatibilities\""
+  },
+  "@pika/pack": {
+    "pipeline": [
+      [
+        "@pika/plugin-standard-pkg"
+      ],
+      [
+        "@pika/plugin-build-node"
+      ],
+      [
+        "@pika/plugin-build-web"
+      ]
+    ]
   },
   "keywords": [
     "slack",
@@ -23,6 +37,10 @@
     "request": "^2.88.0"
   },
   "devDependencies": {
+    "@pika/pack": "^0.3.0",
+    "@pika/plugin-build-node": "^0.3.9",
+    "@pika/plugin-build-web": "^0.3.9",
+    "@pika/plugin-standard-pkg": "^0.3.9",
     "esm": "^3.2.0",
     "mocha": "^5.2.0",
     "proxyquire": "^1.4.0",

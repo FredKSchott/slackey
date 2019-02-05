@@ -44,6 +44,7 @@ export function getOAuthClient(config) {
  * @return {SlackAPIClient}
  */
 export function getAPIClient(config) {
+  console.log(SlackAPIClient);
   if (typeof config === 'string') {
     config = {token: config};
   }

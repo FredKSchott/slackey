@@ -54,7 +54,7 @@ SlackAPIClient.prototype.send = function(method, options, callback) {
     callback = callback || function () {/* no-op */};
   }
 
-  var requestOptions = {
+  const requestOptions = {
     url: this.apiURL + method
   };
 

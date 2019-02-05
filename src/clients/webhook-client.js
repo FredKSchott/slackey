@@ -44,7 +44,7 @@ SlackWebhookClient.prototype.SlackError = SlackError;
 SlackWebhookClient.prototype.send = function(payload, callback) {
   callback = callback || function () {/* no-op */};
 
-  var requestOptions = {
+  const requestOptions = {
     url: this.webhookURL,
     method: 'POST',
     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
