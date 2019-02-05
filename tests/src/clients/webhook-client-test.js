@@ -2,7 +2,7 @@
 
 var assert = require('assert');
 var proxyquire = require('proxyquire');
-var SlackError = require('../../../lib/slack-error');
+var SlackError = require('../../../src/slack-error');
 
 var SlackWebhookClient;
 var slackWebhookClient;
@@ -13,7 +13,7 @@ describe('SlackWebhookClient', function() {
 
   beforeEach(function() {
     makeWebhookRequestStub = this.sinon.stub();
-    SlackWebhookClient = proxyquire('../../../lib/clients/webhook-client.js', {
+    SlackWebhookClient = proxyquire('../../../src/clients/webhook-client.js', {
       '../make-webhook-request': makeWebhookRequestStub
     });
     slackWebhookClient = new SlackWebhookClient({

@@ -4,10 +4,10 @@
 // Requirements
 ////////////////////////////////////////////////////////////////////////////////
 
-var SlackAPIClient = require('./lib/clients/api-client');
-var SlackOAuthClient = require('./lib/clients/oauth-client');
-var SlackWebhookClient = require('./lib/clients/webhook-client');
-var SlackError = require('./lib/slack-error');
+var SlackAPIClient = require('./clients/api-client');
+var SlackOAuthClient = require('./clients/oauth-client');
+var SlackWebhookClient = require('./clients/webhook-client');
+var SlackError = require('./slack-error');
 
 
 ////////////////////////////////////////////////////////////////////////////////

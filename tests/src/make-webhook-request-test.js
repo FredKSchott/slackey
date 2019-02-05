@@ -2,7 +2,7 @@
 
 var assert = require('assert');
 var proxyquire = require('proxyquire');
-var SlackError = require('../../lib/slack-error');
+var SlackError = require('../../src/slack-error');
 
 var makeWebhookRequest;
 var requestStub;
@@ -11,7 +11,7 @@ describe('makeWebhookRequest', function() {
 
   beforeEach(function() {
     requestStub = this.sinon.stub();
-    makeWebhookRequest = proxyquire('../../lib/make-webhook-request', {
+    makeWebhookRequest = proxyquire('../../src/make-webhook-request', {
       'request': requestStub
     });
   });

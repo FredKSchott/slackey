@@ -2,7 +2,7 @@
 
 var assert = require('assert');
 var proxyquire = require('proxyquire');
-var SlackError = require('../../lib/slack-error');
+var SlackError = require('../../src/slack-error');
 
 var makeAPIRequest;
 var requestStub;
@@ -11,7 +11,7 @@ describe('makeAPIRequest', function() {
 
   beforeEach(function() {
     requestStub = this.sinon.stub();
-    makeAPIRequest = proxyquire('../../lib/make-api-request', {
+    makeAPIRequest = proxyquire('../../src/make-api-request', {
       'request': requestStub
     });
   });
