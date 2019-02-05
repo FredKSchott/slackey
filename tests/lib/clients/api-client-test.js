@@ -89,7 +89,7 @@ describe('SlackAPIClient', function() {
       assert(makeAPIRequestStub.calledWithMatch({
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: 'attachments=%5B%7B%22text%22%3A%22foobar%22%7D%5D&token=XXX' 
+        body: 'attachments=%5B%7B%22text%22%3A%22foobar%22%7D%5D&token=XXX'
       }));
     });
 
@@ -109,7 +109,7 @@ describe('SlackAPIClient', function() {
     });
 
     it('should attach the file option as form-upload data when called with "file.upload" method', function() {
-      var fileData = new Buffer(123);
+      var fileData = Buffer.from('123');
       var methodOptions = {file: fileData};
       slackAPIClient.send('files.upload', methodOptions);
       assert(makeAPIRequestStub.calledWithMatch({formData: {file: fileData}}));

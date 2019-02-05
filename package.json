@@ -2,9 +2,8 @@
   "name": "slackey",
   "version": "1.1.1",
   "description": "A Dependable JavaScript SDK for the Slack API",
-  "main": "index.js",
   "scripts": {
-    "test": "node_modules/.bin/mocha --reporter dot --recursive ./tests/util/setup.js ./tests"
+    "test": "mocha --reporter dot --recursive ./tests/util/setup.js ./tests"
   },
   "keywords": [
     "slack",
@@ -21,13 +20,11 @@
     "url": "https://github.com/FredKSchott/slackey.git"
   },
   "dependencies": {
-    "object-assign": "^2.0.0",
-    "request": "^2.55.0"
+    "request": "^2.88.0"
   },
   "devDependencies": {
-    "eslint": "^0.20.0",
-    "mocha": "^2.2.4",
-    "sinon": "^1.14.1",
-    "proxyquire": "^1.4.0"
+    "mocha": "^5.2.0",
+    "proxyquire": "^1.4.0",
+    "sinon": "^1.14.1"
   }
 }
