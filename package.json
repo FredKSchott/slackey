@@ -1,6 +1,6 @@
 {
   "name": "slackey",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A Dependable JavaScript SDK for the Slack API",
   "scripts": {
     "build": "pack build",
@@ -8,10 +8,18 @@
   },
   "@pika/pack": {
     "pipeline": [
-      ["@pika/plugin-standard-pkg"],
-      ["@pika/plugin-build-node"],
-      ["@pika/plugin-build-web"],
-      ["@pika/plugin-build-types"]
+      [
+        "@pika/plugin-standard-pkg"
+      ],
+      [
+        "@pika/plugin-build-node"
+      ],
+      [
+        "@pika/plugin-build-web"
+      ],
+      [
+        "@pika/plugin-build-types"
+      ]
     ]
   },
   "keywords": [
