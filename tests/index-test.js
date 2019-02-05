@@ -1,11 +1,11 @@
-'use strict';
 
-var assert = require('assert');
-var proxyquire = require('proxyquire');
-var SlackAPIClient = require('../src/clients/api-client');
-var SlackWebhookClient = require('../src/clients/webhook-client');
-var SlackOAuthClient = require('../src/clients/oauth-client');
-var SlackError = require('../src/slack-error');
+
+import assert from 'assert';
+import proxyquire from 'proxyquire';
+import {SlackAPIClient} from '../src/clients/api-client';
+import {SlackWebhookClient} from '../src/clients/webhook-client';
+import {SlackOAuthClient} from '../src/clients/oauth-client';
+import {SlackError}from '../src/slack-error';
 
 var slackey;
 var SlackAPIClientSpy;
@@ -19,9 +19,9 @@ describe('Slackey', function() {
     SlackWebhookClientSpy = this.sinon.spy(SlackWebhookClient);
     SlackOAuthClientSpy = this.sinon.spy(SlackOAuthClient);
     slackey = proxyquire('../src/index.js', {
-      './clients/api-client': SlackAPIClientSpy,
-      './clients/webhook-client': SlackWebhookClientSpy,
-      './clients/oauth-client': SlackOAuthClientSpy
+      './clients/api-client': {SlackAPIClient: SlackAPIClientSpy},
+      './clients/webhook-client': {SlackWebhookClient: SlackWebhookClientSpy},
+      './clients/oauth-client': {SlackOAuthClient: SlackOAuthClientSpy}
     });
   });
 

@@ -1,11 +1,11 @@
-'use strict';
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Requirements
 ////////////////////////////////////////////////////////////////////////////////
 
-var request = require('request');
-var SlackError = require('./slack-error');
+import request from 'request';
+import {SlackError} from './slack-error';
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -21,7 +21,7 @@ var SlackError = require('./slack-error');
  * @param {Function} callback
  * @callback {[Error]}
  */
-module.exports = function makeAPIRequest(requestOptions, callback) {
+export function makeWebhookRequest(requestOptions, callback) {
   request(requestOptions, function(err, response) {
     if (err) {
       callback(err);

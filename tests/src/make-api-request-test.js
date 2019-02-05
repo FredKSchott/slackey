@@ -1,8 +1,8 @@
-'use strict';
 
-var assert = require('assert');
-var proxyquire = require('proxyquire');
-var SlackError = require('../../src/slack-error');
+
+import assert from 'assert';
+import proxyquire from 'proxyquire';
+import {SlackError}from '../../src/slack-error';
 
 var makeAPIRequest;
 var requestStub;
@@ -13,7 +13,7 @@ describe('makeAPIRequest', function() {
     requestStub = this.sinon.stub();
     makeAPIRequest = proxyquire('../../src/make-api-request', {
       'request': requestStub
-    });
+    }).makeAPIRequest;
   });
 
   var requestOptions;

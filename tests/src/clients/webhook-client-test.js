@@ -1,8 +1,8 @@
-'use strict';
 
-var assert = require('assert');
-var proxyquire = require('proxyquire');
-var SlackError = require('../../../src/slack-error');
+
+import assert from 'assert';
+import proxyquire from 'proxyquire';
+import {SlackError}from '../../../src/slack-error';
 
 var SlackWebhookClient;
 var slackWebhookClient;
@@ -15,7 +15,7 @@ describe('SlackWebhookClient', function() {
     makeWebhookRequestStub = this.sinon.stub();
     SlackWebhookClient = proxyquire('../../../src/clients/webhook-client.js', {
       '../make-webhook-request': makeWebhookRequestStub
-    });
+    }).SlackWebhookClient;
     slackWebhookClient = new SlackWebhookClient({
       webhookURL: 'XXX'
     });

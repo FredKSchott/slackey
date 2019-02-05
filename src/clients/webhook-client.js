@@ -1,13 +1,13 @@
-'use strict';
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Requirements
 ////////////////////////////////////////////////////////////////////////////////
 
-var querystring = require('querystring');
-var assert = require('assert');
-var SlackError = require('../slack-error');
-var makeWebhookRequest = require('../make-webhook-request');
+import querystring from 'querystring';
+import assert from 'assert';
+import {SlackError} from '../slack-error';
+import {makeWebhookRequest} from '../make-webhook-request';
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -24,7 +24,7 @@ var makeWebhookRequest = require('../make-webhook-request');
  * @param {string} options.webhookURL An Incoming Webhook URL to send messages to
  * @return {void}
  */
-var SlackWebhookClient = module.exports = function SlackWebhookClient(options) {
+export function SlackWebhookClient(options) {
   assert(options && options.webhookURL, 'SlackWebhookClient constructor requires the `webhookURL` option');
   this.webhookURL = options.webhookURL;
 };

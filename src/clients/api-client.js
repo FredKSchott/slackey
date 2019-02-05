@@ -1,13 +1,13 @@
-'use strict';
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Requirements
 ////////////////////////////////////////////////////////////////////////////////
 
-var assert = require('assert');
-var querystring = require('querystring');
-var SlackError = require('../slack-error');
-var makeAPIRequest = require('../make-api-request');
+import assert from 'assert';
+import querystring from 'querystring';
+import {SlackError} from '../slack-error';
+import {makeAPIRequest} from '../make-api-request';
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -25,7 +25,7 @@ var makeAPIRequest = require('../make-api-request');
  * @param {string} [options.apiURL='https://slack.com/api/'] The base API URL to communicate with
  * @return {void}
  */
-var SlackAPIClient = module.exports = function SlackAPIClient(options) {
+export function SlackAPIClient(options) {
   options = options || {};
   this.token = options.token;
   this.apiURL = options.apiURL || 'https://slack.com/api/';

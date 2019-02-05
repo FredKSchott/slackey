@@ -1,4 +1,4 @@
-'use strict';
+
 
 /**
  * SlackError - Slack Response Error
@@ -11,7 +11,7 @@
  * @param {Object} [options] Additional information for logging
  * @param {Object} [options.response] A full response object from the request module
  */
-function SlackError(message, options) {
+export function SlackError(message, options) {
   this.name = 'SlackError';
   this.message = message || 'Slack Response Error';
   if (options.response) {
@@ -22,5 +22,3 @@ function SlackError(message, options) {
 
 SlackError.prototype = Object.create(Error.prototype);
 SlackError.prototype.constructor = SlackError;
-
-module.exports = SlackError;

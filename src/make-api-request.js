@@ -1,11 +1,11 @@
-'use strict';
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Requirements
 ////////////////////////////////////////////////////////////////////////////////
 
-var request = require('request');
-var SlackError = require('./slack-error');
+import request from 'request';
+import {SlackError} from './slack-error';
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -25,7 +25,7 @@ var SlackError = require('./slack-error');
  * @param {Function} callback
  * @callback {[Error, ResponseBody]}
  */
-module.exports = function makeAPIRequest(requestOptions, callback) {
+export function makeAPIRequest(requestOptions, callback) {
   // Default to JSON always, unless explicitly told otherwise
   requestOptions.json = (typeof requestOptions.json !== 'undefined') ? requestOptions.json : true;
 

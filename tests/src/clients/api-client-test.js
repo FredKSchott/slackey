@@ -1,8 +1,8 @@
-'use strict';
 
-var assert = require('assert');
-var proxyquire = require('proxyquire');
-var SlackError = require('../../../src/slack-error');
+
+import assert from 'assert';
+import proxyquire from 'proxyquire';
+import {SlackError}from '../../../src/slack-error';
 
 var SlackAPIClient;
 var slackAPIClient;
@@ -15,7 +15,7 @@ describe('SlackAPIClient', function() {
     makeAPIRequestStub = this.sinon.stub();
     SlackAPIClient = proxyquire('../../../src/clients/api-client.js', {
       '../make-api-request': makeAPIRequestStub
-    });
+    }).SlackAPIClient;
     slackAPIClient = new SlackAPIClient({
       token: 'XXX',
       apiURL: 'YYY'
